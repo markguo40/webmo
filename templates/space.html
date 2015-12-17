@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Space | {{ forum.name }}</title>
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/offcanvas.css'%}" rel="stylesheet">
+    <style>
+        .cover-link{
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+        display:block;
+        }
+        .img-cover{
+        min-height: 100%;
+        min-width: 100%;
+        }
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+        #post-button{
+        margin-top: 16px;
+        }
+        #sidebar{
+        margin-top:16px;
+        }
+        .posts{
+        border-bottom: 1px inset;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        }
+        #newforum-prompt{
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'nav_bar.html' %}
+    <a class="cover-link">
+        <img class="img-cover" src="{% static 'img/nature.jpg' %}" alt="Cover">
+    </a>
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags and message.tags == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <div class="row row-offcanvas row-offcanvas-right wrapper">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+            <div class="col-xs-12 col-sm-9">
+                <div class="row">
+                    <h3 class="col-xs-10 col-sm-8 col-md-8 col-lg-6">Welcome to <span class="label label-default">{{ forum.name }}</span></h3>
+                    <div class="col-xs-0 col-sm-2 col-md-2 col-lg-4"></div>
+                      <button id="post-button" class="btn btn-success col-xs-2 col-sm-2 col-md-2 col-lg-2"
+             role="button" {% if go %}
+             data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"
+             {% else %}
+             data-container="body" data-toggle="popover" data-placement="bottom" data-content="Sorry, You have to login in order to post."
+             {% endif %}>Post</button>
+                </div>
+
+                {% if go %}
+                <div class="collapse" id="collapseExample">
+                    <div class="well">
+                      <form method="post">{% csrf_token %}
+                          {% render_field postform.title class="form-control" placeholder="title" %}
+                          {% render_field postform.text class="form-control" rows="4" placeholder="text" %}
+                        <span class="btn btn-default btn-file glyphicon glyphicon-file"><input type="file"></span>
+                        <button class="btn btn-default" type="submit">Go!</button>
+                      </form>
+                    </div>
+                </div>
+                {% endif %}
+                <hr>
+                {% if not posts %}
+                <h3 id="newforum-prompt">This is a new forum. Click post to be the first person to post!!</h3>
+                {% endif %}
+            {% for i in posts reversed %}
+                  <div class="posts">
+                    <h4><a href="{% url 'page' forum=forum.urlname session=mysession.urlname article=i.urlname%}">{{ i.title }} </a></h4>
+                      <p>Author: {{ i.writer }}<span>&nbsp; {{ i.date }}</span></p>
+                    <p>{{ i.text }}</p>
+                  </div>
+            {% endfor %}
+            </div><!-- End of main-->
+
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+              <div class="list-group">
+                <a class="list-group-item active">Sessions</a>
+                  {% for i in sessions %}
+                    {% if i.name == 'k1n234#$normal$%^&*' %}
+                  <a href="{% url 'space' name=forum.urlname %}" class="list-group-item">Public Square</a>
+                    {% else %}
+                  <a href="{% url 'spacewithsession' name=forum.urlname session=i.urlname %}" class="list-group-item">{{ i.name }}</a>
+                    {% endif %}
+
+                  {% endfor %}
+              </div>
+            </div><!--/.sidebar-offcanvas-->
+        </div>
+
+        <nav>
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+    </div><!--end container-->
+    {% include 'footer.html' %}
+    <script src="{% static 'js/offcanvas.js' %}"></script>
+    <script>$(function () {
+  $('[data-toggle="popover"]').popover()
+})</script>
+</body>
+</html>

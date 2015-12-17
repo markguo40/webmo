@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up| Webmo</title>
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <style>
+        body {
+          padding-top: 40px;
+          padding-bottom: 40px;
+          background-color: #eee;
+        }
+        .helptext{
+            display:none;
+        }
+        #signup{
+            width: 350px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'nav_bar.html' %}
+    <div class="container">
+
+      <form id='signup' method="post">
+        <h2>Webmo sign up</h2>{% csrf_token %}
+        {{ signup.as_p }}
+          <p>op means optional</p>
+        <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </div> <!-- /container -->
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load widget_tweaks %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Page</title>
+
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/blog.css'%}" rel="stylesheet">
+    <style>
+      .comment-btn{
+        margin-bottom: 10px;
+        margin-top:10px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+  {% include 'nav_bar.html' %}
+
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags and message.tags == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">{{ forum.name }} Space</h1>
+        <p class="lead blog-description">From
+          {% if session.name == 'k1n234#$normal$%^&*' %}
+          Public Space
+          {% else %}
+          {{ session.name }}
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">{{ page.title }}</h2>
+            <p class="blog-post-meta">{{ page.date }} by <a href="#">{{ page.writer }}</a></p>
+            <hr>
+              {{ page.text|linebreaksbr }}
+
+        </div><!-- /.blog-post -->
+
+          <nav>
+            <ul class="pager">
+
+              <li><a href="{% if previous != None %}
+              {% url 'page' forum=previous.forum.urlname session=previous.session.urlname article=previous.urlname %}
+              {% endif %}">Previous</a></li>
+              <li><a href="{% if next != None %}
+              {% url 'page' forum=next.forum.urlname session=next.session.urlname article=next.urlname %}
+              {% endif %}">Next</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h3>Comment</h3>
+            {% if go%}
+            <form method="post"> {% csrf_token %}
+            {% render_field form.commenttext class="form-control" rows="4" %}
+              <input type="submit" class="btn btn-default comment-btn">
+            </form>
+            {% else %}
+            <div class="panel panel-default">
+              <div class="panel-body">
+            Wanna comment on this post? Log in is the key!
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          {% for i in comments reversed %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <span class="panel-title">{{ i.writer }}</span>
+              <p style='font-size:10px' >{{ i.date }}</p>
+            </div>
+            <div class="panel-body">
+              {{ i.commenttext|linebreaksbr }}
+            </div>
+          </div>
+          {% endfor %}
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Forum info-bar now under construction</p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Archives</h4>
+            <ol class="list-unstyled">
+              <li><a href="{% url 'spacewithsession' name=forum.urlname session=session.urlname %}">
+          {% if session.name == 'k1n234#$normal$%^&*' %}
+          Public Space
+          {% else %}
+          {{ session.name }}
+          {% endif %}
+              </a></li>
+            </ol>
+          </div>
+
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+
+    {% include 'footer.html' %}
+
+  </body>
+</html>
