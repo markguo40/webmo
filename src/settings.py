@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '(zvzzqyvq^@(%f%p+tao8s_0-jgp_)mvdz!ss4m$h_j!=oy$wj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['webmo.herokuapp.com']
 
 
 # Application definition
