@@ -120,8 +120,9 @@
                     {% else %}
                   <a href="{% url 'spacewithsession' name=forum.urlname session=i.urlname %}" class="list-group-item">{{ i.name }}</a>
                     {% endif %}
-
                   {% endfor %}
+                  <a class="list-group-item">Other forums which were random selected</a>
+                  <a class="list-group-item">Other forums by greedy algorithm</a>
               </div>
             </div><!--/.sidebar-offcanvas-->
         </div>

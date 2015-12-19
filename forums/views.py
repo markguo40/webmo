@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Forum, Session, Post, Comment
 
 
-def log_process(request):
+def log_process(request, signup1=False):
     go = False
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -35,6 +35,8 @@ def log_process(request):
         else:
             go = True
     else:
+        if signup1 == True:
+            return False
         if request.method == 'POST':
             username = request.POST['username']
             password = request.POST['password']
@@ -123,7 +125,7 @@ def space(request, name, session="k1n234#$normal$%^&*"):
 
 
 def signup(request):
-    go = log_process(request)
+    go = log_process(request, True)
     if go:
         return HttpResponseRedirect('/')
     else:
@@ -131,6 +133,8 @@ def signup(request):
         if request.method == 'POST':
             if form.is_valid():
                 form.save()
+                messages.success(request, 'Now you have your username:' + str(request.POST['username'])+
+                                 '. You can login with it! :D')
 
     context = {
         'n': range(8),

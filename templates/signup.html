@@ -24,6 +24,14 @@
 </head>
 <body>
     {% include 'nav_bar.html' %}
+
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags and message.tags == 'success' %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
     <div class="container">
 
       <form id='signup' method="post">
